@@ -1,8 +1,8 @@
-import MainMenu from "./components/MainMenu";
+import MainMenu from './components/MainMenu';
 
 function App() {
   return (
-    <div className="py-16 lg:px-64 md:px-44 px-20">
+    <div className="px-20 py-16 md:px-44 lg:px-64">
       <MainMenu />
     </div>
   );

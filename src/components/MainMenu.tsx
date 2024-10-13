@@ -1,25 +1,26 @@
-import { useState, useMemo, useEffect } from "react";
-import courses from "../data/courses.json";
-import { Course, Module } from "../types/types";
-import SearchBar from "./SearchBar";
-import BackButton from "./ui/BackButton";
-import RenderList from "./RenderList";
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import courses from '../data/courses.json';
+import { Course, Module } from '../types/types';
+import SearchBar from './SearchBar';
+import BackButton from './ui/BackButton';
+import RenderList from './RenderList';
 
 export default function MainMenu() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Reset the searchTerm when opening a new course or module
+  // Reset the searchTerm whenever the selected course or module changes
   useEffect(() => {
-    setSearchTerm("");
+    setSearchTerm('');
   }, [selectedCourse, selectedModule]);
 
-  const pageTitle = selectedModule
-    ? "Lessons"
-    : selectedCourse
-      ? "Modules"
-      : "Courses";
+  let pageTitle = 'Courses';
+  if (selectedModule) {
+    pageTitle = 'Lessons';
+  } else if (selectedCourse) {
+    pageTitle = 'Modules';
+  }
 
   // Compute unfilteredData based on the current selection
   const unfilteredData = useMemo(() => {
@@ -36,32 +37,44 @@ export default function MainMenu() {
   const filteredData = useMemo(() => {
     if (!searchTerm) return unfilteredData;
 
+    const lowercasedSearchTerm = searchTerm.toLowerCase();
+
     return unfilteredData.filter((item) => {
-      return (
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (item.topics &&
-          item.topics.some((topic) =>
-            topic.toLowerCase().includes(searchTerm.toLowerCase())
-          ))
-      );
+      const titleMatches = item.title
+        .toLowerCase()
+        .includes(lowercasedSearchTerm);
+
+      // Type guard for 'description'
+      const descriptionMatches =
+        'description' in item && item.description
+          ? item.description.toLowerCase().includes(lowercasedSearchTerm)
+          : false;
+
+      // Type guard for 'topics'
+      const topicsMatch =
+        'topics' in item && item.topics
+          ? item.topics.some((topic) =>
+              topic.toLowerCase().includes(lowercasedSearchTerm),
+            )
+          : false;
+
+      return titleMatches || descriptionMatches || topicsMatch;
     });
   }, [unfilteredData, searchTerm]);
 
   // Handle navigating back to the previous page
-  const handleReturnToPreviousPage = () => {
+  const handleReturnToPreviousPage = useCallback(() => {
     if (selectedModule) {
       setSelectedModule(null);
     } else if (selectedCourse) {
       setSelectedCourse(null);
     }
-    // Reset the search term
-    setSearchTerm("");
-  };
+    setSearchTerm('');
+  }, [selectedModule, selectedCourse]);
 
   return (
     <>
-      <h1 className="font-bold text-3xl pb-10">{pageTitle}</h1>
+      <h1 className="pb-10 text-3xl font-bold">{pageTitle}</h1>
 
       <SearchBar
         title={`Search ${pageTitle}`}

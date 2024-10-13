@@ -1,5 +1,5 @@
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import { Button } from "./button";
+import { ArrowLeftIcon } from '@radix-ui/react-icons';
+import { Button } from './button';
 
 type BackButtonProps = {
   onReturnToPreviousPage: () => void;

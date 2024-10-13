@@ -1,6 +1,6 @@
-import { Lesson, Module } from "../types/types";
-import DisplayItem from "./ui/DisplayItem";
-import ModuleLessons from "./ModuleLessons";
+import { Lesson, Module } from '../types/types';
+import DisplayItem from './ui/DisplayItem';
+import ModuleLessons from './ModuleLessons';
 
 // Update the type to accept filteredData
 type CourseModulesProps = {

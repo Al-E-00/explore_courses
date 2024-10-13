@@ -1,5 +1,5 @@
 type Content = {
-  type: "text" | "video" | "podcast" | "audio";
+  type: 'text' | 'video' | 'podcast' | 'audio';
   data: string;
 };
 
@@ -22,4 +22,6 @@ type Course = {
   modules: Module[];
 };
 
-export { Course, Module, Lesson, Content };
+type SearchableItem = Course | Module | Lesson;
+
+export { Course, Module, Lesson, Content, SearchableItem };

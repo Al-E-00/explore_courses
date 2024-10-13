@@ -1,4 +1,4 @@
-import { Content } from "../types/types";
+import { Content } from '../types/types';
 
 type VisualizeLessonProps = {
   lessonContent: Content[];
@@ -6,13 +6,13 @@ type VisualizeLessonProps = {
 
 function renderContent(content: Content) {
   switch (content.type) {
-    case "text":
+    case 'text':
       return <p className="py-3">{content.data}</p>;
-    case "video":
-      return <video className="w-[100%] " src={content.data} controls />;
-    case "podcast":
+    case 'video':
+      return <video className="w-[100%]" src={content.data} controls />;
+    case 'podcast':
       return <audio className="w-[100%]" src={content.data} controls />;
-    case "audio":
+    case 'audio':
       return <audio className="w-[100%]" src={content.data} controls />;
     default:
       return null;

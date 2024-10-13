@@ -1,5 +1,5 @@
-import { Lesson } from "../types/types";
-import DisplayItem from "./ui/DisplayItem";
+import { Lesson } from '../types/types';
+import DisplayItem from './ui/DisplayItem';
 
 import {
   Dialog,
@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
-import VisualizeLesson from "./VisualizeLesson";
+import VisualizeLesson from './VisualizeLesson';
 
 type ModuleLessonsProps = {
   lesson: Lesson;
@@ -24,7 +24,7 @@ export default function ModuleLessons({ lesson }: ModuleLessonsProps) {
           <ul className="flex flex-col justify-center gap-2 py-3 md:flex-row">
             {lesson.topics.map((topic) => (
               <li
-                className="border-2 border-violet-200 rounded-lg px-1 py-1 grow-0 text-xs lg:text-sm font-semibold bg-gray-50 text-gray-800"
+                className="grow-0 rounded-lg border-2 border-violet-200 bg-gray-50 px-1 py-1 text-xs font-semibold text-gray-800 lg:text-sm"
                 key={topic}
               >
                 {topic}

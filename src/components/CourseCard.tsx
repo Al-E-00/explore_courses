@@ -1,5 +1,5 @@
-import { Course } from "../types/types";
-import DisplayItem from "./ui/DisplayItem";
+import { Course } from '../types/types';
+import DisplayItem from './ui/DisplayItem';
 
 type CourseCardProps = {
   course: Course;
