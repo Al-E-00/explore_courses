@@ -1,5 +1,5 @@
 import { Lesson, Module } from "../types/types";
-import DisplayList from "./ui/DisplayList";
+import DisplayItem from "./ui/DisplayItem";
 import ModuleLessons from "./ModuleLessons";
 
 // Update the type to accept filteredData
@@ -22,11 +22,10 @@ export default function CourseModules({
   if (!selectedModule) {
     // Render filtered modules
     const modules = filteredData as Module[];
-    console.log("🚀 ~ modules:", modules);
     return (
       <>
         {modules.map((module) => (
-          <DisplayList
+          <DisplayItem
             key={module.title}
             title={module.title}
             onClick={() => handleClickModule(module)}

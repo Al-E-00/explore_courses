@@ -1,5 +1,5 @@
 import { Course } from "../types/types";
-import DisplayList from "./ui/DisplayList";
+import DisplayItem from "./ui/DisplayItem";
 
 type CourseCardProps = {
   course: Course;
@@ -16,7 +16,7 @@ export default function CourseCard({
 
   return (
     <>
-      <DisplayList
+      <DisplayItem
         description={course.description}
         title={course.title}
         onClick={() => handleSelectedCourse(course)}

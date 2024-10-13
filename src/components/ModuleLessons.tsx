@@ -1,5 +1,5 @@
-import { Content, Lesson } from "../types/types";
-import DisplayList from "./ui/DisplayList";
+import { Lesson } from "../types/types";
+import DisplayItem from "./ui/DisplayItem";
 
 import {
   Dialog,
@@ -20,18 +20,18 @@ export default function ModuleLessons({ lesson }: ModuleLessonsProps) {
   return (
     <Dialog>
       <DialogTrigger>
-        <DisplayList title={lesson.title} description={lesson.description}>
-          <ul className="flex gap-2 py-3">
+        <DisplayItem title={lesson.title} description={lesson.description}>
+          <ul className="flex flex-col justify-center gap-2 py-3 md:flex-row">
             {lesson.topics.map((topic) => (
               <li
-                className="border-2 border-violet-200 rounded-lg px-1 grow-0 text-sm font-semibold bg-gray-50 text-gray-800"
+                className="border-2 border-violet-200 rounded-lg px-1 py-1 grow-0 text-xs lg:text-sm font-semibold bg-gray-50 text-gray-800"
                 key={topic}
               >
                 {topic}
               </li>
             ))}
           </ul>
-        </DisplayList>
+        </DisplayItem>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
