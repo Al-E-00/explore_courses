@@ -12,13 +12,11 @@ export default function SearchBar({
   setSearchTerm,
 }: SearchBarProps) {
   return (
-    <div>
-      <Input
-        placeholder={title}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        value={searchTerm}
-        className="mb-4"
-      />
-    </div>
+    <Input
+      placeholder={title}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      value={searchTerm}
+      className="mb-4"
+    />
   );
 }

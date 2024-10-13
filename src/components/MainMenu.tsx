@@ -92,6 +92,7 @@ export default function MainMenu() {
         selectedModule={selectedModule}
         setSelectedModule={setSelectedModule}
         filteredData={filteredData}
+        searchTerm={searchTerm}
       />
     </>
   );

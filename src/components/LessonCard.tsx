@@ -1,6 +1,4 @@
-import { Lesson } from '../types/types';
 import DisplayItem from './ui/DisplayItem';
-
 import {
   Dialog,
   DialogContent,
@@ -9,14 +7,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
 import VisualizeLesson from './VisualizeLesson';
+import { Lesson } from '../types/types';
 
-type ModuleLessonsProps = {
+type LessonCardProps = {
   lesson: Lesson;
 };
 
-export default function ModuleLessons({ lesson }: ModuleLessonsProps) {
+export default function LessonCard({ lesson }: LessonCardProps) {
   return (
     <Dialog>
       <DialogTrigger>

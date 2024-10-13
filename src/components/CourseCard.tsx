@@ -10,17 +10,15 @@ export default function CourseCard({
   course,
   onSelectedCourse,
 }: CourseCardProps) {
-  const handleSelectedCourse = (course: Course) => {
+  const handleSelectedCourse = () => {
     onSelectedCourse(course);
   };
 
   return (
-    <>
-      <DisplayItem
-        description={course.description}
-        title={course.title}
-        onClick={() => handleSelectedCourse(course)}
-      />
-    </>
+    <DisplayItem
+      description={course.description}
+      title={course.title}
+      onClick={handleSelectedCourse}
+    />
   );
 }
