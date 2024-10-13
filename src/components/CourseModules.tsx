@@ -1,17 +1,17 @@
-import { Course, Module } from "../types/types";
+import { Lesson, Module } from "../types/types";
 import DisplayList from "./ui/DisplayList";
 import ModuleLessons from "./ModuleLessons";
 
+// Update the type to accept filteredData
 type CourseModulesProps = {
-  course: Course;
-  onBack: () => void;
+  filteredData: Module[] | Lesson[];
   selectedModule: Module | null;
   onSelectedModule: (module: Module) => void;
 };
 
+// Update the component function parameters
 export default function CourseModules({
-  course,
-  onBack,
+  filteredData,
   selectedModule,
   onSelectedModule,
 }: CourseModulesProps) {
@@ -19,15 +19,30 @@ export default function CourseModules({
     onSelectedModule(module);
   };
 
-  return !selectedModule
-    ? course.modules.map((module) => (
-        <DisplayList
-          key={module.title}
-          title={module.title}
-          onClick={() => handleClickModule(module)}
-        />
-      ))
-    : selectedModule.lessons.map((lesson) => (
-        <ModuleLessons key={lesson.title} lesson={lesson} />
-      ));
+  if (!selectedModule) {
+    // Render filtered modules
+    const modules = filteredData as Module[];
+    console.log("🚀 ~ modules:", modules);
+    return (
+      <>
+        {modules.map((module) => (
+          <DisplayList
+            key={module.title}
+            title={module.title}
+            onClick={() => handleClickModule(module)}
+          />
+        ))}
+      </>
+    );
+  } else {
+    // Render filtered lessons
+    const lessons = filteredData as Lesson[];
+    return (
+      <>
+        {lessons.map((lesson) => (
+          <ModuleLessons key={lesson.title} lesson={lesson} />
+        ))}
+      </>
+    );
+  }
 }

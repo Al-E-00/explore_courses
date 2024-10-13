@@ -1,25 +1,19 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import courses from "../data/courses.json";
-import CourseCard from "./CourseCard";
-
-import { Course, Lesson, Module } from "../types/types";
-import CourseModules from "./CourseModules";
-import { Button } from "./ui/button";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { Course, Module } from "../types/types";
 import SearchBar from "./SearchBar";
+import BackButton from "./ui/BackButton";
+import RenderList from "./RenderList";
 
 export default function MainMenu() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
-  const [filteredCourses, setFilteredCourses] = useState<Course[]>(courses);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleReturnToPreviousPage = () => {
-    if (selectedModule) {
-      setSelectedModule(null);
-    } else if (selectedCourse) {
-      setSelectedCourse(null);
-    }
-  };
+  // Reset the searchTerm when opening a new course or module
+  useEffect(() => {
+    setSearchTerm("");
+  }, [selectedCourse, selectedModule]);
 
   const pageTitle = selectedModule
     ? "Lessons"
@@ -27,17 +21,42 @@ export default function MainMenu() {
       ? "Modules"
       : "Courses";
 
-  const handleSearchDataFiltered = (
-    filteredData: Course[] | Module[] | Lesson[]
-  ) => {
-    if (selectedCourse) {
-      setSelectedCourse({
-        ...selectedCourse,
-        modules: filteredData as Module[],
-      });
+  // Compute unfilteredData based on the current selection
+  const unfilteredData = useMemo(() => {
+    if (selectedModule) {
+      return selectedModule.lessons;
+    } else if (selectedCourse) {
+      return selectedCourse.modules;
     } else {
-      setFilteredCourses(filteredData as Course[]);
+      return courses;
     }
+  }, [selectedModule, selectedCourse]);
+
+  // Compute filteredData based on searchTerm
+  const filteredData = useMemo(() => {
+    if (!searchTerm) return unfilteredData;
+
+    return unfilteredData.filter((item) => {
+      return (
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.topics &&
+          item.topics.some((topic) =>
+            topic.toLowerCase().includes(searchTerm.toLowerCase())
+          ))
+      );
+    });
+  }, [unfilteredData, searchTerm]);
+
+  // Handle navigating back to the previous page
+  const handleReturnToPreviousPage = () => {
+    if (selectedModule) {
+      setSelectedModule(null);
+    } else if (selectedCourse) {
+      setSelectedCourse(null);
+    }
+    // Reset the search term
+    setSearchTerm("");
   };
 
   return (
@@ -46,48 +65,21 @@ export default function MainMenu() {
 
       <SearchBar
         title={`Search ${pageTitle}`}
-        dataType={
-          selectedModule ? "lesson" : selectedCourse ? "module" : "course"
-        }
-        searchData={
-          selectedModule
-            ? selectedCourse?.modules || []
-            : selectedCourse
-              ? selectedCourse.modules
-              : courses
-        }
-        onSearchDataFiltered={handleSearchDataFiltered}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
 
-      {selectedCourse && (
-        <Button
-          variant="outline"
-          className="mb-4"
-          onClick={handleReturnToPreviousPage}
-        >
-          <ArrowLeftIcon />
-        </Button>
+      {(selectedCourse || selectedModule) && (
+        <BackButton onReturnToPreviousPage={handleReturnToPreviousPage} />
       )}
 
-      <div className="grid grid-cols-2 gap-4">
-        {!selectedCourse &&
-          filteredCourses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              onSelectedCourse={setSelectedCourse}
-            />
-          ))}
-
-        {selectedCourse && (
-          <CourseModules
-            course={selectedCourse}
-            onBack={() => setSelectedCourse(null)}
-            selectedModule={selectedModule}
-            onSelectedModule={setSelectedModule}
-          />
-        )}
-      </div>
+      <RenderList
+        selectedCourse={selectedCourse}
+        setSelectedCourse={setSelectedCourse}
+        selectedModule={selectedModule}
+        setSelectedModule={setSelectedModule}
+        filteredData={filteredData}
+      />
     </>
   );
 }
