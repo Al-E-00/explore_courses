@@ -1,29 +1,25 @@
-type ContentProps = {
+type Content = {
   type: "text" | "video" | "podcast" | "audio";
   data: string;
 };
 
-type LessonsProps = {
+type Lesson = {
   title: string;
   description: string;
   topics: string[];
-  content: ContentProps[];
+  content: Content[];
 };
 
-type ModuleProps = {
-  modules: {
-    title: string;
-    lessons: LessonsProps[];
-  }[];
+type Module = {
+  title: string;
+  lessons: Lesson[];
 };
 
-type CourseProps = {
-  course: {
-    id: number;
-    title: string;
-    description: string;
-    modules: ModuleProps[];
-  };
+type Course = {
+  id: number;
+  title: string;
+  description: string;
+  modules: Module[];
 };
 
-export { CourseProps, ModuleProps, LessonsProps, ContentProps };
+export { Course, Module, Lesson, Content };
