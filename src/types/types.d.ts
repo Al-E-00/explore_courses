@@ -1,5 +1,5 @@
 type Content = {
-  type: 'text' | 'video' | 'podcast' | 'audio';
+  type: string;
   data: string;
 };
 

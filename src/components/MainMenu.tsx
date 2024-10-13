@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import courses from '../data/courses.json';
-import { Course, Module } from '../types/types';
+import { Course, Module, SearchableItem } from '../types/types';
 import SearchBar from './SearchBar';
 import BackButton from './ui/BackButton';
 import RenderList from './RenderList';
@@ -23,7 +23,7 @@ export default function MainMenu() {
   }
 
   // Compute unfilteredData based on the current selection
-  const unfilteredData = useMemo(() => {
+  const unfilteredData = useMemo((): SearchableItem[] => {
     if (selectedModule) {
       return selectedModule.lessons;
     } else if (selectedCourse) {
@@ -34,7 +34,7 @@ export default function MainMenu() {
   }, [selectedModule, selectedCourse]);
 
   // Compute filteredData based on searchTerm
-  const filteredData = useMemo(() => {
+  const filteredData = useMemo((): SearchableItem[] => {
     if (!searchTerm) return unfilteredData;
 
     const lowercasedSearchTerm = searchTerm.toLowerCase();
