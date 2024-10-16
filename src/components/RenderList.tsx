@@ -9,7 +9,7 @@ import { RootState } from '@/state/store';
 type SearchableItem = Course | Module | Lesson;
 
 type RenderListProps = {
-  filteredData: SearchableItem[];
+  filteredData: SearchableItem[] | null | undefined;
   searchTerm: string;
 };
 
@@ -22,7 +22,9 @@ export default function RenderList({
   ).selectedCourse;
   const selectedModule = useSelector(
     (state: RootState) => state.currentCourse,
-  ).selectModule;
+  ).selectedModule;
+
+  if (!filteredData) return null;
 
   if (filteredData.length === 0) {
     return (

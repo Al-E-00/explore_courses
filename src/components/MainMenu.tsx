@@ -17,30 +17,26 @@ import ErrorComponent from './ErrorComponent';
 export default function MainMenu() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const courses = useSelector((state: RootState) => state.courses).courses;
+  const { courses, loading, error } = useSelector(
+    (state: RootState) => state.courses,
+  );
 
   const selectedCourse = useSelector(
     (state: RootState) => state.currentCourse,
   ).selectedCourse;
-  const selectedModule = useSelector(
+  const { selectedModule } = useSelector(
     (state: RootState) => state.currentCourse,
-  ).selectModule;
-  const searchTerm = useSelector(
-    (state: RootState) => state.uiState,
-  ).searchTerm;
+  );
+  const { searchTerm } = useSelector((state: RootState) => state.uiState);
 
   useEffect(() => {
-    async function callFetchCourses() {
-      await dispatch(coursesFetchAsync());
-    }
-
-    callFetchCourses();
-  }, []);
+    dispatch(coursesFetchAsync());
+  }, [dispatch]);
 
   // Reset the searchTerm whenever the selected course or module changes
   useEffect(() => {
     dispatch(setSearchTerm({ searchTerm: '' }));
-  }, [selectedCourse, selectedModule]);
+  }, [dispatch, selectedCourse, selectedModule]);
 
   let pageTitle = 'Courses';
   if (selectedModule) {
@@ -51,12 +47,12 @@ export default function MainMenu() {
 
   // Compute unfilteredData based on the current selection
   const unfilteredData = useMemo((): SearchableItem[] => {
-    if (selectedModule) {
+    if (selectedModule?.lessons) {
       return selectedModule.lessons;
-    } else if (selectedCourse) {
+    } else if (selectedCourse?.modules) {
       return selectedCourse.modules;
     } else {
-      return courses;
+      return courses || [];
     }
   }, [selectedModule, selectedCourse, courses]);
 
@@ -66,7 +62,7 @@ export default function MainMenu() {
 
     const lowercasedSearchTerm = searchTerm.toLowerCase();
 
-    return unfilteredData.filter((item) => {
+    return unfilteredData?.filter((item) => {
       const titleMatches = item.title
         .toLowerCase()
         .includes(lowercasedSearchTerm);
@@ -97,10 +93,10 @@ export default function MainMenu() {
       dispatch(selectCourse({ course: null }));
     }
     dispatch(setSearchTerm({ searchTerm: '' }));
-  }, [selectedModule, selectedCourse]);
+  }, [selectedModule, selectedCourse, dispatch]);
 
-  if (courses === undefined) return <ErrorComponent />;
-  if (courses === null) return <LoaderComponent />;
+  if (error.isError) return <ErrorComponent message={error.message} />;
+  if (loading) return <LoaderComponent />;
 
   return (
     <>

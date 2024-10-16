@@ -1,4 +1,8 @@
-export default function ErrorComponent() {
+type ErrorMessageProps = {
+  message: string | undefined;
+};
+
+export default function ErrorComponent({ message }: ErrorMessageProps) {
   //Height of the div adjusted to subtract the padding of the parent div
   return (
     <div
@@ -9,7 +13,7 @@ export default function ErrorComponent() {
         Oops! If you see this page, we could be having some issues.
       </h1>
       <p className="pt-5 italic text-gray-600">
-        Please, try again later or contact the developers.
+        Error message: {message || 'No error message provided'}
       </p>
     </div>
   );

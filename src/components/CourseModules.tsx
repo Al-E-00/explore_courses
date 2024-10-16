@@ -22,26 +22,18 @@ export default function CourseModules({
   if (!selectedModule) {
     // Render filtered modules
     const modules = filteredData as Module[];
-    return (
-      <>
-        {modules.map((module) => (
-          <DisplayItem
-            key={module.title}
-            title={module.title}
-            onClick={() => handleClickModule(module)}
-          />
-        ))}
-      </>
-    );
+    return modules.map((module) => (
+      <DisplayItem
+        key={module.title}
+        title={module.title}
+        onClick={() => handleClickModule(module)}
+      />
+    ));
   } else {
     // Render filtered lessons
     const lessons = filteredData as Lesson[];
-    return (
-      <>
-        {lessons.map((lesson) => (
-          <ModuleLessons key={lesson.title} lesson={lesson} />
-        ))}
-      </>
-    );
+    return lessons.map((lesson) => (
+      <ModuleLessons key={lesson.title} lesson={lesson} />
+    ));
   }
 }

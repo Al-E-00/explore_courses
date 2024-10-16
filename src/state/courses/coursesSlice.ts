@@ -4,9 +4,18 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type CoursesState = {
   courses: Course[] | undefined | null;
+  loading: boolean;
+  error: {
+    isError: boolean;
+    message: string | undefined;
+  };
 };
 
-const initialState: CoursesState = { courses: undefined };
+const initialState: CoursesState = {
+  courses: undefined,
+  loading: false,
+  error: { isError: false, message: undefined },
+};
 
 const coursesSlice = createSlice({
   name: 'courses',
@@ -16,13 +25,20 @@ const coursesSlice = createSlice({
     builder
       .addCase(coursesFetchAsync.pending, (state) => {
         state.courses = null;
+        state.loading = true;
       })
       .addCase(
         coursesFetchAsync.fulfilled,
         (state, action: PayloadAction<Course[]>) => {
+          state.loading = false;
           state.courses = action.payload;
         },
-      );
+      )
+      .addCase(coursesFetchAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error.isError = true;
+        state.error.message = action.error.message;
+      });
   },
 });
 

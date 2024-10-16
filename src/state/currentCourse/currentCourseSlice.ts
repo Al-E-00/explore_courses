@@ -3,12 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type initialStateT = {
   selectedCourse: Course | null;
-  selectModule: Module | null;
+  selectedModule: Module | null;
 };
 
 const initialState: initialStateT = {
   selectedCourse: null,
-  selectModule: null,
+  selectedModule: null,
 };
 
 const courseSlice = createSlice({
@@ -19,7 +19,7 @@ const courseSlice = createSlice({
       state.selectedCourse = action.payload.course;
     },
     selectModule: (state, action: PayloadAction<{ module: Module | null }>) => {
-      state.selectModule = action.payload.module;
+      state.selectedModule = action.payload.module;
     },
   },
 });
