@@ -1,29 +1,29 @@
-import React from 'react';
 import { Course, Lesson, Module } from '../types/types';
 import { isCourse, isLesson, isModule } from '../lib/utils';
 import CourseList from './CourseList';
 import ModuleList from './ModuleList';
 import LessonList from './LessonList';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
 
 type SearchableItem = Course | Module | Lesson;
 
 type RenderListProps = {
-  selectedCourse: Course | null;
-  setSelectedCourse: React.Dispatch<React.SetStateAction<Course | null>>;
-  selectedModule: Module | null;
-  setSelectedModule: React.Dispatch<React.SetStateAction<Module | null>>;
   filteredData: SearchableItem[];
   searchTerm: string;
 };
 
 export default function RenderList({
-  selectedCourse,
-  setSelectedCourse,
-  selectedModule,
-  setSelectedModule,
   filteredData,
   searchTerm,
 }: RenderListProps) {
+  const selectedCourse = useSelector(
+    (state: RootState) => state.currentCourse,
+  ).selectedCourse;
+  const selectedModule = useSelector(
+    (state: RootState) => state.currentCourse,
+  ).selectModule;
+
   if (filteredData.length === 0) {
     return (
       <div className="font-bold italic text-gray-500">
@@ -35,17 +35,11 @@ export default function RenderList({
   return (
     <div className="grid grid-cols-2 gap-4">
       {!selectedCourse && !selectedModule && (
-        <CourseList
-          courses={filteredData.filter(isCourse)}
-          onSelectCourse={setSelectedCourse}
-        />
+        <CourseList courses={filteredData.filter(isCourse)} />
       )}
 
       {selectedCourse && !selectedModule && (
-        <ModuleList
-          modules={filteredData.filter(isModule)}
-          onSelectModule={setSelectedModule}
-        />
+        <ModuleList modules={filteredData.filter(isModule)} />
       )}
 
       {selectedModule && <LessonList lessons={filteredData.filter(isLesson)} />}

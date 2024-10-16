@@ -1,24 +1,20 @@
+import { useDispatch } from 'react-redux';
 import { Course } from '../types/types';
 import DisplayItem from './ui/DisplayItem';
+import { selectCourse } from '@/state/currentCourse/currentCourseSlice';
 
 type CourseCardProps = {
   course: Course;
-  onSelectedCourse: (course: Course) => void;
 };
 
-export default function CourseCard({
-  course,
-  onSelectedCourse,
-}: CourseCardProps) {
-  const handleSelectedCourse = () => {
-    onSelectedCourse(course);
-  };
+export default function CourseCard({ course }: CourseCardProps) {
+  const dispatch = useDispatch();
 
   return (
     <DisplayItem
       description={course.description}
       title={course.title}
-      onClick={handleSelectedCourse}
+      onClick={() => dispatch(selectCourse({ course: course }))}
     />
   );
 }

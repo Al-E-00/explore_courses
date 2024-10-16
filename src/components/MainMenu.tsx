@@ -1,18 +1,33 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
-import courses from '../data/courses.json';
-import { Course, Module, SearchableItem } from '../types/types';
+import { useMemo, useEffect, useCallback } from 'react';
+import { SearchableItem } from '../types/types';
 import SearchBar from './SearchBar';
 import BackButton from './ui/BackButton';
 import RenderList from './RenderList';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
+import {
+  selectCourse,
+  selectModule,
+} from '@/state/currentCourse/currentCourseSlice';
+import { setSearchTerm } from '@/state/UI/uiSlice';
 
 export default function MainMenu() {
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const dispatch = useDispatch();
 
+  const selectedCourse = useSelector(
+    (state: RootState) => state.currentCourse,
+  ).selectedCourse;
+  const selectedModule = useSelector(
+    (state: RootState) => state.currentCourse,
+  ).selectModule;
+  const searchTerm = useSelector(
+    (state: RootState) => state.uiState,
+  ).searchTerm;
+
+  const courses = useSelector((state: RootState) => state.courses);
   // Reset the searchTerm whenever the selected course or module changes
   useEffect(() => {
-    setSearchTerm('');
+    dispatch(setSearchTerm({ searchTerm: '' }));
   }, [selectedCourse, selectedModule]);
 
   let pageTitle = 'Courses';
@@ -31,7 +46,7 @@ export default function MainMenu() {
     } else {
       return courses;
     }
-  }, [selectedModule, selectedCourse]);
+  }, [selectedModule, selectedCourse, courses]);
 
   // Compute filteredData based on searchTerm
   const filteredData = useMemo((): SearchableItem[] => {
@@ -65,35 +80,24 @@ export default function MainMenu() {
   // Handle navigating back to the previous page
   const handleReturnToPreviousPage = useCallback(() => {
     if (selectedModule) {
-      setSelectedModule(null);
+      dispatch(selectModule({ module: null }));
     } else if (selectedCourse) {
-      setSelectedCourse(null);
+      dispatch(selectCourse({ course: null }));
     }
-    setSearchTerm('');
+    dispatch(setSearchTerm({ searchTerm: '' }));
   }, [selectedModule, selectedCourse]);
 
   return (
     <>
       <h1 className="pb-10 text-3xl font-bold">{pageTitle}</h1>
 
-      <SearchBar
-        title={`Search ${pageTitle}`}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
+      <SearchBar title={`Search ${pageTitle}`} searchTerm={searchTerm} />
 
       {(selectedCourse || selectedModule) && (
         <BackButton onReturnToPreviousPage={handleReturnToPreviousPage} />
       )}
 
-      <RenderList
-        selectedCourse={selectedCourse}
-        setSelectedCourse={setSelectedCourse}
-        selectedModule={selectedModule}
-        setSelectedModule={setSelectedModule}
-        filteredData={filteredData}
-        searchTerm={searchTerm}
-      />
+      <RenderList filteredData={filteredData} searchTerm={searchTerm} />
     </>
   );
 }
