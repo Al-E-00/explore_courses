@@ -4,15 +4,20 @@ import SearchBar from './SearchBar';
 import BackButton from './ui/BackButton';
 import RenderList from './RenderList';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/state/store';
+import { AppDispatch, RootState } from '@/state/store';
 import {
   selectCourse,
   selectModule,
 } from '@/state/currentCourse/currentCourseSlice';
 import { setSearchTerm } from '@/state/UI/uiSlice';
+import { coursesFetchAsync } from '@/state/courses/coursesSlice';
+import LoaderComponent from './LoaderComponent';
+import ErrorComponent from './ErrorComponent';
 
 export default function MainMenu() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const courses = useSelector((state: RootState) => state.courses).courses;
 
   const selectedCourse = useSelector(
     (state: RootState) => state.currentCourse,
@@ -24,7 +29,14 @@ export default function MainMenu() {
     (state: RootState) => state.uiState,
   ).searchTerm;
 
-  const courses = useSelector((state: RootState) => state.courses);
+  useEffect(() => {
+    async function callFetchCourses() {
+      await dispatch(coursesFetchAsync());
+    }
+
+    callFetchCourses();
+  }, []);
+
   // Reset the searchTerm whenever the selected course or module changes
   useEffect(() => {
     dispatch(setSearchTerm({ searchTerm: '' }));
@@ -86,6 +98,9 @@ export default function MainMenu() {
     }
     dispatch(setSearchTerm({ searchTerm: '' }));
   }, [selectedModule, selectedCourse]);
+
+  if (courses === undefined) return <ErrorComponent />;
+  if (courses === null) return <LoaderComponent />;
 
   return (
     <>
