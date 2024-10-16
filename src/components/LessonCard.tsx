@@ -19,7 +19,7 @@ export default function LessonCard({ lesson }: LessonCardProps) {
     <Dialog>
       <DialogTrigger>
         <DisplayItem title={lesson.title} description={lesson.description}>
-          <ul className="flex flex-col justify-center gap-2 py-3 md:flex-row">
+          <ul className="mt-auto flex flex-col justify-center gap-2 py-3 md:flex-row">
             {lesson.topics.map((topic) => (
               <li
                 className="grow-0 rounded-lg border-2 border-violet-200 bg-gray-50 px-1 py-1 text-xs font-semibold text-gray-800 lg:text-sm"

@@ -13,7 +13,7 @@ export default function DisplayItem({
 }: DisplayItemProps) {
   return (
     <article
-      className="rounded-lg border-2 border-sky-200 p-4 transition-all hover:cursor-pointer hover:border-sky-300 hover:bg-slate-100"
+      className="flex h-[100%] flex-col rounded-lg border-2 border-sky-200 p-4 transition-all hover:cursor-pointer hover:border-sky-300 hover:bg-slate-100"
       onClick={onClick}
     >
       <header>
