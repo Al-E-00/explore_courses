@@ -1,50 +1,96 @@
-# React + TypeScript + Vite
+**Explore Courses**
+===================
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive web application built with React and TypeScript that displays a catalog of online courses. With this app, users can browse through a variety of courses, explore the details of each course, navigate through the course structure, and use a search feature to quickly find courses by title or description.
 
-Currently, two official plugins are available:
+**Features**
+------------
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Course Browsing
 
-## Expanding the ESLint configuration
+-   Displays a list of all available courses, fetched from a JSON file.
+-   Allows users to click on a course to see more details, including descriptions, modules, and lessons.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Course Detail View
 
-- Configure the top-level `parserOptions` property like this:
+-   Provides an in-depth view of each course, including a list of modules and lessons within each module.
+-   Supports various content types, such as text, video, audio, and podcasts, rendering them appropriately in the lesson view.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+### Navigation
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+-   Allows users to smoothly navigate between courses, modules, and lessons.
+-   Includes a search feature to filter courses by title or description.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react';
+**Tech Stack**
+--------------
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-});
-```
+### **Core Technologies**
+
+-   **React** for the front-end framework.
+-   **TypeScript** for robust type-checking and better code structure.
+
+### **Additional Tools**
+
+-   **Redux Toolkit** for state management.
+-   **JSON File** for course data, making it simple to fetch and update the course catalog.
+
+**Getting Started**
+-------------------
+
+### Prerequisites
+
+Ensure you have the following installed on your local environment:
+
+-   [Node.js](https://nodejs.org/) (v14 or newer)
+-   [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) package manager
+
+### Installation
+
+1.  Clone the repository:
+
+    `git clone https://github.com/Al-E-00/explore_courses`
+
+2.  Navigate to the project directory:
+
+    `cd explore-courses`
+
+3.  Install the project dependencies:
+
+    `npm install`
+
+    or
+
+    `yarn install`
+
+### Running the Application
+
+To run the app in development mode, use the following command:
+
+`npm start`
+
+or
+
+`yarn start`
+
+Then, open http://localhost:3000 to view it in your browser. The app will automatically reload if you make any changes to the code.
+
+**Project Structure**
+---------------------
+
+### TypeScript Interfaces
+
+-   **Course**: Represents a course with `id`, `title`, `description`, and `modules`.
+-   **Module**: Represents a module with a `title` and a list of `lessons`.
+-   **Lesson**: Represents a lesson with a `title`, `description`, `topics`, and `content`.
+-   **Content**: Defines various content types, including text, video, audio, and podcast.
+
+### State Management (Redux Toolkit)
+
+-   **Store**: Configured with slices for managing courses, current course, and UI state.
+-   **Slices**: Contains reducers for setting the course list, current course, current module, and current lesson.
+-   **Async Thunks**: Manages the asynchronous fetching of course data.
+-   **Selectors**: Memoized selectors for derived states, such as filtered courses and current lesson content.
+
+### JSON Data Structure
+
+The course data is stored in a JSON file (`courses.json`) for easy maintenance. Each course has a structure containing modules, lessons, and content, making it simple to fetch and update.
